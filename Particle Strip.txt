@@ -1,0 +1,78 @@
+
+void setup() {
+    
+  // Subscribe to events published by IFTTT using Particle.subscribe
+  Particle.subscribe("Turn_On_String", turnOn); //Declare the IFTTT name and the function to run
+  Particle.subscribe("Turn_Off_String", turnOff); //Mode 0
+  Particle.subscribe("Static_String", setStatic); //Mode 3
+  
+  
+  Serial1.begin(9600);
+}
+
+void loop() {
+    
+    delay(100);
+}
+//Mode RRR GGG BBB or Mode 0/1 or Mode 0-255
+//Mode 0 = use enabled to turn lights off while preserving color mode. 
+//Mode b = adjust brightness, c = color
+//Mode 1 = rainbow, 2 = bounce, 3 = static color, 4 = stars 
+
+
+//our events are called when IFTTT applets are triggered
+void turnOn(const char *event, const char *data) //Mode 0 (On/ off)
+{
+    Serial1.println("0 1");
+}
+
+void turnOff(const char *event, const char *data) //Mode 0
+{
+    Serial1.println("0 0"); 
+}
+
+
+void setStatic(const char *event, const char *data) //Set modes/ colors
+{   
+    String color = data;
+    
+    if(color.equalsIgnoreCase("Rainbow"))
+        Serial1.println("1");
+        
+    if(color.equalsIgnoreCase("Bounce"))
+        Serial1.println("2");
+        
+    if(color.equalsIgnoreCase("Static"))
+        Serial1.println("3");
+    
+    if(color.equalsIgnoreCase("Star") || color.equalsIgnoreCase("Stars"))
+        Serial1.println("4");
+        
+    if(color.equalsIgnoreCase("Red"))
+        Serial1.println("c 255 0 0");
+        
+    if(color.equalsIgnoreCase("Green"))
+        Serial1.println("c 0 255 0");
+        
+    if(color.equalsIgnoreCase("Blue"))
+        Serial1.println("c 0 0 255");
+        
+    if(color.equalsIgnoreCase("Yellow"))
+        Serial1.println("c 255 255 0");
+        
+    if(color.equalsIgnoreCase("Purple"))
+        Serial1.println("c 255 0 255");
+        
+    if(color.equalsIgnoreCase("White"))
+        Serial1.println("c 150 255 255");
+    
+    if(color.equalsIgnoreCase("Dim") || color.equalsIgnoreCase("Dark"))
+        Serial1.println("b 50");
+    if(color.equalsIgnoreCase("Darker"))
+        Serial1.println("b 25");
+    if(color.equalsIgnoreCase("Bright"))
+        Serial1.println("b 255");
+        
+    if(color.equalsIgnoreCase("Movie"))
+        Serial1.println("c 255 0 0 b 25 3"); 
+}
